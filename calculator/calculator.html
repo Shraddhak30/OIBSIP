@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CALCULATOR</title>
+	<link rel="stylesheet" href="css/style.css" type="text/css"/>
+	<style>
+		body
+         {
+            background-image:url('img/calimage.jpg');
+            background-repeat:no-repeat;
+            background-position: center top;
+            background-attachment: fixed;
+            background-size: cover;
+            filter: none;
+         }
+	</style>
+</head>
+<body>
+    <div id="heading">
+        <h1>CALCULATOR</h1>
+    </div>
+	<div>
+	<form name="calculator">
+		<table align="center">
+			
+    		<div class="main" >
+				
+				<tr>
+					<td colspan="5"> <input type="text" name="input" id="entry" style="text-align:right"> </td>
+				</tr>
+   				 <tr>
+					<td colspan="5"> <input type="number" name="output" id="ans" placeholder="0" style="text-align:right" readonly> </td>
+				</tr>
+			</div>
+
+    		<div>
+				<tr>
+					<td><button type="button" value="(" onclick="number(value)" class="space"> ( </button> </td>
+					<td><button type="button" value=")" onclick="number(value)"> )</button> </td>
+					<td><button type="button" value=" " onclick="equal()"> = </button> </td>
+					<td><button type="button" value="C" onclick="del()"> DEL</button> </td>
+					<td><button type="button" value="ac" onclick="remove()" class="spaceright"> AC</button> </td>
+				</tr>
+			</div>
+
+			<div>
+				<tr>
+					<td><button type="button" value="7" onclick="number(value)"class="spaceleft"> 7  </button> </td>
+					<td><button type="button" value="8" onclick="number(value)" class="digit"> 8  </button> </td>
+					<td><button type="button" value="9" onclick="number(value)" class="digit">9  </button> </td>
+					<td><button type="button" value="sqrt2" onclick="sqrt2()"> &radic; </button> </td>
+					<td><button type="button" value="%" onclick="percent(input)" class="spaceright">  % </button> </td>
+				</tr>
+			</div>
+
+			<div>
+				<tr>
+					<td><button type="button" value="4" onclick="number(value)" class="spaceleft"> 4</button> </td>
+					<td><button type="button" value="5" onclick="number(value)"class="digit"> 5 </button> </td>
+					<td><button type="button" value="6" onclick="number(value)"class="digit"> 6 </button> </td>
+					<td><button type="button" value="*" onclick="number(value)"> * </button> </td>
+					<td><button type="button" value="/" onclick="number(value)"class="spaceright"> /  </button> </td>
+				</tr>
+			</div>
+
+			<div>
+				<tr>
+					<td><button type="button" value="1" onclick="number(value)"class="spaceleft"> 1 </button> </td>
+					<td><button type="button" value="2" onclick="number(value)"class="digit"> 2 </button> </td>
+					<td><button type="button" value="3" onclick="number(value)"class="digit"> 3 </button> </td>
+					<td><button type="button" value="+" onclick="number(value)"> + </button> </td>
+					<td><button type="button" value="-" onclick="number(value)" class="spaceright"> - </button> </td>
+				</tr>
+			</div>
+
+			<div>
+				<tr>
+					<td><button type="button" value="." onclick="number(value)" class="space"> . </button> </td>
+					<td><button type="button" value="0" onclick="number(value)"class="digit"> 0</button> </td>
+					<td><button type="button" value="&#177" onclick="change(input)"> +/- </button> </td>
+					<td colspan="2"><button type="button" onclick="show()" class="answer"> ANS </button> </td>
+				</tr>
+			</div>
+		</table>
+	</form>
+	</div>
+
+<script>
+
+	function show(){
+		if(document.calculator.value==null)
+		{
+			var a=eval(document.calculator.input.value);
+			document.calculator.input.value=" ";
+			document.calculator.input.value=a;
+			document.calculator.output.value=document.calculator.input.value
+		}
+		else{
+		document.calculator.input.value = document.calculator.output.value;
+		}
+	}
+	
+	function percent(input) {
+		val = input.value;
+		input.value= input.value + "%";
+		document.calculator.output.value = val*(0.01);
+	}
+	
+	function change(input) {
+		if(input.value.substring(0, 1) == "-")
+		input.value = input.value.substring(1, input.value.length)
+		else
+		input.value = "-" + input.value
+	}
+
+	function del(){
+		var dele = document.calculator.input.value;
+		document.calculator.input.value = dele.substr(0, dele.length-1);
+	}
+
+	function sqrt2(){
+		document.calculator.output.value = Math.pow(document.calculator.input.value, 1/2);
+	}
+	
+	function number(value){
+		document.calculator.input.value += value;
+	}
+
+	function remove(){
+		document.calculator.input.value=" ";
+		document.calculator.output.value=" ";
+	}
+
+	function equal(){
+		document.calculator.output.value=eval(document.calculator.input.value);
+	}
+</script>
+</body>
+</html>
