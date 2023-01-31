@@ -1,0 +1,53 @@
+body{
+    background-image: repeating-linear-gradient(rgb(144, 231, 249), rgb(200, 215, 234), rgb(144, 231, 249));
+    margin:0 20%;
+    font-family: monospace;
+}
+
+img#abc{
+     box-shadow: 0 0 20px black;
+}
+
+.quote{
+    background-image:radial-gradient(#a0c6ff,white);
+    box-shadow: 10px 10px 5px rgb(120, 115, 115);
+}
+#info{
+    text-align: center;
+    text-shadow: 5px 5px 10px rgb(79, 90, 149);
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+  }
+
+small{
+    font-size: 20px;
+    font-family: fantasy;
+    text-align: center;
+}
+
+#img-caption{
+    font: size 20pxpx;
+
+}
+
+div#tribute-info{
+    background-color: rgba(0,0,0,0.2);
+    box-shadow: 20px 20px 15px grey;
+    padding: 5px 10px;
+    margin-top: 20px;
+}
+
+#title{
+    color: rgb(9, 4, 94);
+    size: 600px;
+    text-align: center;
+    text-shadow: 5px 5px 10px black;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+
+}
