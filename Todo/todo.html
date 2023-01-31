@@ -1,0 +1,235 @@
+<html>
+    <head>
+        <title>TO DO APP</title>
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="css/style.css" type="text/css"/>
+    
+        <style>
+            body
+             {
+                background-image:url('img/todo.jpg');
+                background-repeat:no-repeat;
+                background-position: center top;
+                background-attachment: fixed;
+                background-size: cover;
+                filter: none;
+             }
+        </style>
+
+    </head>
+<body>
+    <div class="todo"><h1>TO-DO APP</h1></div>
+        
+        <div class="insidetodo">
+            <div class="input-box">
+                <div>
+                    <input type="text" class="inputTodo" placeholder="Enter your task" id="todoInput" />
+                    <input type="hidden" id="saveId">
+                </div>
+                <button type="button" class="add_btn" id="add_task">
+                Add Task</button>
+                <button type="button" class="add_btn" id="save_task" style="display: none;">
+                Save Task</button>
+            </div>
+            <div class="task-list">
+           
+            <div class="controls">
+                <div class="filters">
+                    <span id="all" class="active">All</span>
+                    <span id="pending">Pending</span>
+                    <span id="complete">Completed</span>
+                </div>
+                <button class="deleteAll_btn">Clear All</button>
+            </div>
+            <div class="todo_output">
+                <table class="tablelist" id="taskList">
+                  
+                </table>
+              </div>
+        </div>
+    </div>  
+</body>
+<script>
+    displayTask("all");
+let todoInput = document.getElementById("todoInput");
+let add_task = document.getElementById("add_task");
+
+let deleteAll= document.querySelector(".deleteAll_btn");
+
+//filter
+let options = document.querySelectorAll(".filters span");
+options.forEach(btn => {
+    btn.addEventListener("click", () => {
+        document.querySelector("span.active").classList.remove("active");
+        btn.classList.add("active");
+        displayTask(btn.id);
+    });
+});
+
+//add
+add_task.addEventListener("click", function(){
+    todoInputval = todoInput.value;
+    let userTask=todoInputval.trim();
+    
+    if(todoInputval.trim()!=0){
+        let tasks = JSON.parse(localStorage.getItem("todolocal"));
+       
+        tasks = !tasks ? [] : tasks;
+        tasks.push({'task_name':userTask, 'completeStatus':false, 'status':'pending'});
+        
+        localStorage.setItem("todolocal", JSON.stringify(tasks));
+        todoInput.value = '';
+        displayTask(document.querySelector("span.active").id);
+    }
+    
+});
+
+// displayTask
+function displayTask(filter){
+    let mytask = localStorage.getItem("todolocal");
+    if(mytask == null){
+        tasks = [];
+    }
+    else{
+        tasks = JSON.parse(mytask);
+    }
+
+    let html = '';
+    let taskList = document.getElementById("taskList");
+    
+    if(tasks){
+        tasks.forEach((todo, index) => {
+            let finished=todo.status=="complete"?"checked":"";
+            if(todo.completeStatus==true){
+                toDoName = `<td class="done">${todo.task_name}</td>`;
+            }else{
+                toDoName = `<td>${todo.task_name}</td>`;
+            }
+            if(filter==todo.status || filter=="all"){
+
+            html += `<tr class="task">
+                        <td scope="row">${index+1}</td>
+                        ${toDoName}
+                        <td><button type="button" onclick="editTask(${index})" class="edited">Edit</button></td>
+                        <td><label for="${index}">
+                                <input  type="checkbox"  class="finalized" id="${index}" ${finished}>
+                                <span class="${finished}">Complete</span>
+                            </label></td>
+                        
+                        <td><button type="button" onclick="deleteTask(${index},'${filter}')" class="cancelled">Delete</button></td>
+                    
+                    </tr>`;
+                    }
+        
+    })}
+    taskList.innerHTML = html||`<span class="no-task">You have No Task here </span>`;
+  
+};                                         
+
+// edit
+function editTask(index){
+    let saveId = document.getElementById("saveId");
+    let add_task = document.getElementById("add_task");
+    let save_task = document.getElementById("save_task");
+    saveId.value = index;
+    let mytask = localStorage.getItem("todolocal");
+    let tasks = JSON.parse(mytask);
+    
+    todoInput.value = tasks[index]['task_name'];
+    
+    todoInput.focus();
+    todoInput.classList.add("active");
+
+    add_task.style.display="none";
+    save_task.style.display="block";
+}
+
+// save
+let save_task = document.getElementById("save_task");
+save_task.addEventListener("click", function(){
+    let add_task = document.getElementById("add_task");
+    let mytask = localStorage.getItem("todolocal");
+    let tasks = JSON.parse(mytask); 
+    let saveId = document.getElementById("saveId").value;
+    
+    for (keys in tasks[saveId]) {
+        if(keys == 'task_name'){
+            tasks[saveId].task_name = todoInput.value;
+        }
+      }
+    save_task.style.display="none";
+    add_task.style.display="block";
+    localStorage.setItem("todolocal", JSON.stringify(tasks));
+    todoInput.value='';
+    displayTask(document.querySelector("span.active").id);
+})
+
+
+// complete 
+let taskList = document.getElementById("taskList");
+taskList.addEventListener("click", function(e){
+    let selectedBtn = e.target;
+    let taskName=selectedBtn.parentElement.lastElementChild;
+    // console.log(tasks);
+    if(selectedBtn.classList.contains("finalized")){
+    let task_id = selectedBtn.getAttribute("id");
+    let tasks = JSON.parse(localStorage.getItem("todolocal"));
+    for (keys in tasks[task_id]) {
+        if(keys == 'completeStatus'){
+            if(tasks[task_id][keys]==true && selectedBtn.checked==true){
+            tasks[task_id].completeStatus = false;
+            taskName.classList.remove("checked");
+            tasks[task_id].status="pending";
+
+        }
+        else if( tasks[task_id][keys]==false){
+                tasks[task_id].completeStatus = true;
+                taskName.classList.add("checked");
+                tasks[task_id].status="complete";
+        }
+    }}   
+        localStorage.setItem("todolocal", JSON.stringify(tasks));
+        let mytask = localStorage.getItem("todolocal");
+        tasks = JSON.parse(mytask);
+        tasks.splice(index, 1);
+        localStorage.setItem("todolocal", JSON.stringify(tasks));
+        displayTask();
+    }
+})
+
+
+// delete
+function deleteTask(index,filter){
+    
+    let mytask = localStorage.getItem("todolocal");
+    let tasks = JSON.parse(mytask);
+    tasks.splice(index, 1);
+    localStorage.setItem("todolocal", JSON.stringify(tasks));
+    displayTask(filter);
+}
+
+
+//deleteAll
+deleteAll.addEventListener("click", function(){
+    let save_task = document.getElementById("save_task");
+    let add_task = document.getElementById("add_task");
+    let mytask = localStorage.getItem("todolocal");
+    let tasks = JSON.parse(mytask);
+    if(mytask == null){
+        tasks = [];
+    }
+    else{
+        tasks = JSON.parse(mytask);
+        tasks = [];
+    }
+    save_task.style.display="none";
+    add_task.style.display="block";
+    localStorage.setItem("todolocal", JSON.stringify(tasks));
+    displayTask();
+})
+</script>
+</body>
+</html>
